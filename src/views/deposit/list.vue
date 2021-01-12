@@ -13,8 +13,13 @@
     </div>
 
     <div v-if="activeTab === 'deposit'" class="button-container">
-      <!-- TODO: @click: go somewhere -->
-      <el-button type="primary" class="apply-button" @click="() => {this.$router.push({name: 'Evidence'})}">申请公证</el-button>
+      <el-button
+        type="primary"
+        class="apply-button"
+        @click="$router.push({name: 'Evidence'})"
+      >
+        申请公证
+      </el-button>
     </div>
   </div>
 </template>

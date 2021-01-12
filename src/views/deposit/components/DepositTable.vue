@@ -17,13 +17,16 @@
       align="center"
       show-overflow-tooltip
     />
-    <!-- TODO: check if returned date is rendered correctly here -->
     <el-table-column
       prop="registeredAt"
       label="登记时间"
       align="center"
       show-overflow-tooltip
-    />
+    >
+      <template slot-scope="scope">
+        <span>{{ parseTime(scope.row.registeredAt, '{y}-{m}-{d} {h}:{i}') }}</span>
+      </template>
+    </el-table-column>
     <el-table-column
       prop="status"
       label="登记状态"
@@ -37,10 +40,8 @@
       </template>
     </el-table-column>
     <el-table-column label="操作" align="center">
-      <!-- eslint-disable-next-line-->
       <template slot-scope="scope">
-        <!-- TODO: @click -->
-        <div class="operate-container" @click="()=>{}">
+        <div class="operate-container" @click="handleDownload(scope.row)">
           <img src="../../../assets/xiazai.png" height="14" alt="download" style="cursor: pointer">
           <el-link type="primary" :underline="false" style="margin-left: 5px; color: #10429a">下载</el-link>
         </div>
@@ -51,6 +52,9 @@
 </template>
 
 <script>
+import { getDepositList } from '@/api/deposit'
+import { download, parseTime } from '@/utils'
+
 export default {
   name: 'DepositTable',
   data() {
@@ -63,12 +67,22 @@ export default {
   },
   methods: {
     getList() {
-      // TODO: get deposit list
-      // mock
-      const total = 1
-      this.list = [{ id: 1, name: 'test', author: 'me', registeredAt: '2021-01-04 21:00', status: 'unknown' }]
-      this.$emit('fetched', total)
-    }
+      getDepositList().then((res) => {
+        this.list = res.data.map((value) => ({
+          id: value.id,
+          name: value.name,
+          author: value.author,
+          registeredAt: new Date(value.time),
+          status: '制证发证',
+          content: value.content
+        }))
+        this.$emit('fetched', this.list.length)
+      })
+    },
+    handleDownload(value) {
+      download(value.content, value.name)
+    },
+    parseTime
   }
 }
 </script>

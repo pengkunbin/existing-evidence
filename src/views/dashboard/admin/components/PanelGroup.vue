@@ -26,7 +26,7 @@
         <b style="display:inline-block;height:73%;border-left:2px solid #eee;margin:24px;" />
         <div class="card-panel-description" style="width:47%;height:100%;margin:0 auto;padding:16px;">
           <div class="card-panel-text" style="margin:14% 0 0 40%;">
-            <h1 style="font-size:60px;color:#10429a;font-weight:400;">18</h1>
+            <h1 style="font-size:60px;color:#10429a;font-weight:400;">{{ total }}</h1>
           </div>
         </div>
       </div>
@@ -37,6 +37,11 @@
 <script>
 
 export default {
+    data(){
+        return {
+            total:0,
+        }
+    },
   methods: {
     //    handleSetLineChartData(type) {
     //      this.$emit('handleSetLineChartData', type)

@@ -17,13 +17,16 @@
       align="center"
       show-overflow-tooltip
     />
-    <!-- TODO: check if date is rendered correctly here -->
     <el-table-column
       prop="registeredAt"
       label="登记时间"
       align="center"
       show-overflow-tooltip
-    />
+    >
+      <template slot-scope="scope">
+        <span>{{ parseTime(scope.row.registeredAt, '{y}-{m}-{d} {h}:{i}') }}</span>
+      </template>
+    </el-table-column>
     <el-table-column
       prop="notaryOrg"
       label="公证机构"
@@ -36,18 +39,20 @@
       align="center"
       show-overflow-tooltip
     />
-    <!-- TODO: check if date is rendered correctly here -->
     <el-table-column
       prop="notarizedAt"
       label="公证时间"
       align="center"
       show-overflow-tooltip
-    />
+    >
+      <template slot-scope="scope">
+        <span>{{ parseTime(scope.row.notarizedAt, '{y}-{m}-{d} {h}:{i}') }}</span>
+      </template>
+    </el-table-column>
     <el-table-column label="公证证书" align="center">
       <!-- eslint-disable-next-line-->
     <template slot-scope="scope">
-        <!-- TODO: @click -->
-        <div class="operate-container" @click="()=>{}">
+        <div class="operate-container" @click="handleDownload(scope.row)">
           <img src="../../../assets/xiazai.png" height="14" alt="download" style="cursor: pointer">
           <el-link type="primary" :underline="false" style="margin-left: 5px; color: #10429a">下载</el-link>
         </div>
@@ -58,6 +63,9 @@
 </template>
 
 <script>
+import { getNotarizationList } from '@/api/deposit'
+import { download, parseTime } from '@/utils'
+
 export default {
   name: 'NotarizationTable',
   data() {
@@ -70,11 +78,23 @@ export default {
   },
   methods: {
     getList() {
-      // TODO: get notarization list
-      // mock
-      const total = 1
-      this.list = [{ id: 1, name: 'test', author: 'me', registeredAt: '2021-01-04 21:00', notaryOrg: 'PKU', notary: 'me', notarizedAt: '2021-01-05 14:00' }]
-      this.$emit('fetched', total)
+      getNotarizationList().then((res) => {
+        this.list = res.data.map((value) => ({
+          id: value.id,
+          name: value.name,
+          author: value.author,
+          registeredAt: new Date(value.applytime),
+          notaryOrg: value.authorityname,
+          notary: value.aname,
+          notarizedAt: new Date(value.authoritytime),
+          content: value.content
+        }))
+        this.$emit('fetched', this.list.length)
+      })
+    },
+    parseTime,
+    handleDownload(value) {
+      download(value.content, value.name)
     }
   }
 }

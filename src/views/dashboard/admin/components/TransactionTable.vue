@@ -1,63 +1,60 @@
 <template>
   <el-table :data="list" style="width: 100%;min-height:390px;padding: 0 24px 0 24px;">
-    <el-table-column label="作品名称" min-width="400">
+    <el-table-column
+            prop="name"
+            label="作品名称"
+            align="center"
+            show-overflow-tooltip
+    />
+    <el-table-column
+            prop="author"
+            label="作者名称"
+            align="center"
+            show-overflow-tooltip
+    />
+    <el-table-column
+            prop="registeredAt"
+            label="登记时间"
+            align="center"
+            show-overflow-tooltip
+    >
       <template slot-scope="scope">
-        {{ scope.row.work_title }}
+        <span>{{ parseTime(scope.row.registeredAt, '{y}-{m}-{d} {h}:{i}') }}</span>
       </template>
     </el-table-column>
-    <el-table-column label="作者名称" width="300" align="center">
-      <template slot-scope="scope">
-        {{ scope.row.author_name }}
-      </template>
-    </el-table-column>
-    <el-table-column label="登记时间" width="300" align="center">
-      <template slot-scope="scope">
-        {{ scope.row.record_time }}
-      </template>
-    </el-table-column>
-    <el-table-column label="登记状态" width="300" align="center">
-      <template slot-scope="scope">
-        {{ scope.row.record_status }}
-      </template>
-    </el-table-column>
+    <el-table-column
+            prop="status"
+            label="登记状态"
+            align="center"
+    />
   </el-table>
 </template>
 
 <script>
-import { transactionList } from '@/api/remote-search'
+    import { getDepositList } from '@/api/deposit'
 
 export default {
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        success: 'success',
-        pending: 'danger'
-      }
-      return statusMap[status]
+    data() {
+        return {
+            list: []
+        }
     },
-    orderNoFilter(str) {
-      return str.substring(0, 30)
-    }
-  },
-  data() {
-    return {
-      list: [
-        { 'work_title': '区块链版权存证', 'author_name': '杰特', 'record_time': '2021-01-04 14:00', 'record_status': '制证发证' },
-        { 'work_title': '区块链取证', 'author_name': '罗伯特', 'record_time': '2020-12-24 09:00', 'record_status': '制证发证' },
-        { 'work_title': '区块链取证', 'author_name': '罗伯特', 'record_time': '2020-12-24 09:00', 'record_status': '制证发证' },
-        { 'work_title': '区块链取证', 'author_name': '罗伯特', 'record_time': '2020-12-24 09:00', 'record_status': '制证发证' }
-      ]
-    }
-  },
-  created() {
-    // this.fetchData()
-  },
+    created() {
+        this.getList()
+    },
   methods: {
-    fetchData() {
-      transactionList().then(response => {
-        this.list = response.data.items.slice(0, 8)
-      })
-    }
+      getList() {
+          getDepositList().then((res) => {
+              this.list = res.data.map((value) => ({
+                  id: value.id,
+                  name: value.name,
+                  author: value.author,
+                  registeredAt: new Date(value.time),
+                  status: '制证发证',
+                  content: value.content
+              }))
+          })
+      },
   }
 }
 </script>
