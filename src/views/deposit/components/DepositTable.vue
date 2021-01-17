@@ -4,7 +4,18 @@
     tooltip-effect="dark"
     style="width: 100%"
     :header-cell-style="{ background: '#5893fa', color: '#fff'}"
+    @current-change="handleCurrentChange"
   >
+    <el-table-column
+      label="选择"
+      align="center"
+      width="100"
+      show-overflow-tooltip
+    >
+      <template slot-scope="{ row }">
+        <el-radio v-model="row.selected" label="" />
+      </template>
+    </el-table-column>
     <el-table-column
       prop="name"
       label="作品名称"
@@ -36,7 +47,7 @@
       <!-- eslint-disable-next-line-->
       <template slot-scope="scope">
         <!-- TODO: @click -->
-        <el-link type="primary" style="color: #10429a" :underline="false" @click="()=>{}">查看证书</el-link>
+        <el-link type="primary" style="color: #10429a" :underline="false" @click="showImage(scope.row)">查看证书</el-link>
       </template>
     </el-table-column>
     <el-table-column label="操作" align="center">
@@ -74,13 +85,29 @@ export default {
           author: value.author,
           registeredAt: new Date(value.time),
           status: '制证发证',
-          content: value.content
+          content: value.content,
+          personorteam: value.personorteam,
+          selected: false,
+          block_number: value.block_number,
+          block_hash: value.block_hash,
+          tx_hash: value.tx_hash,
+          description: value.description,
+          type: value.type
         }))
         this.$emit('fetched', this.list.length)
       })
     },
     handleDownload(value) {
       download(value.content, value.name)
+    },
+    handleCurrentChange(val) {
+      this.list.forEach(v => { v.selected = false })
+      val.selected = ''
+      this.$emit('currentRow', val)
+    },
+    showImage(val) {
+      this.$emit('currentRow', val)
+      this.$emit('showImage')
     },
     parseTime
   }

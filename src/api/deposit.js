@@ -20,3 +20,18 @@ export const getNotarizationList = () =>
     url: '/authority/getAuthority',
     method: 'post'
   })
+
+export const saveAuthority = (data) => {
+  return request({
+    url: '/authority/saveAuthority',
+    method: 'post',
+    data
+  })
+}
+
+export const getChainId = () => {
+  return request({
+    url: '/authority/getBlockChainid',
+    method: 'post'
+  })
+}

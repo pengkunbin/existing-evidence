@@ -37,11 +37,11 @@
 <script>
 
 export default {
-    data(){
-        return {
-            total:0,
-        }
-    },
+  data() {
+    return {
+      total: 0
+    }
+  },
   methods: {
     //    handleSetLineChartData(type) {
     //      this.$emit('handleSetLineChartData', type)

@@ -26,7 +26,7 @@
           <b style="display:inline-block;height:73%;border-left:2px solid #eee;margin:24px;" />
           <div class="card-panel-description" style="width:47%;height:100%;margin:0 auto;padding:16px;">
             <div class="card-panel-text" style="margin:14% 0 0 40%;">
-              <h1 style="font-size:60px;color:#10429a;font-weight:400;">{{total}}</h1>
+              <h1 style="font-size:60px;color:#10429a;font-weight:400;">{{ total }}</h1>
             </div>
           </div>
         </div>
@@ -42,31 +42,31 @@
         </div>
         <el-table :data="list" style="width: 100%;min-height:390px;padding: 0 24px 0 24px;">
           <el-table-column
-              prop="name"
-              label="作品名称"
-              align="center"
-              show-overflow-tooltip
+            prop="name"
+            label="作品名称"
+            align="center"
+            show-overflow-tooltip
           />
           <el-table-column
-              prop="author"
-              label="作者名称"
-              align="center"
-              show-overflow-tooltip
+            prop="author"
+            label="作者名称"
+            align="center"
+            show-overflow-tooltip
           />
           <el-table-column
-              prop="registeredAt"
-              label="登记时间"
-              align="center"
-              show-overflow-tooltip
+            prop="registeredAt"
+            label="登记时间"
+            align="center"
+            show-overflow-tooltip
           >
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.registeredAt, '{y}-{m}-{d} {h}:{i}') }}</span>
             </template>
           </el-table-column>
           <el-table-column
-              prop="status"
-              label="登记状态"
-              align="center"
+            prop="status"
+            label="登记状态"
+            align="center"
           />
         </el-table>
       </el-col>
@@ -75,13 +75,13 @@
 </template>
 
 <script>
-  import { getDepositList } from '@/api/deposit'
+import { getDepositList } from '@/api/deposit'
 export default {
   name: 'DashboardAdmin',
   data() {
     return {
       list: [],
-      total: 0,
+      total: 0
     }
   },
   created() {
@@ -98,8 +98,8 @@ export default {
           status: '制证发证',
           content: value.content
         }))
-      });
-      this.total = this.list.length;
+      })
+      this.total = this.list.length
     }
   }
 }

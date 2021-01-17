@@ -22,11 +22,14 @@ export function getInfo() {
 //   })
 // }
 
-//注册
+// 注册
 export function register(data) {
-    return request ({
-        url:'user/registerUser',
-        method: 'post',
-        data,
-    })
+  return request({
+    url: 'user/registerUser',
+    method: 'post',
+    data: {
+      'username': data.username,
+      'password': data.password
+    }
+  })
 }

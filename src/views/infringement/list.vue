@@ -12,9 +12,11 @@
 
       <el-table-column align="center" label="备注" prop="comment" />
       <el-table-column align="center" label="操作">
-        <template>
-          <img src="../../assets/xiazai.png" height="14" alt="download" style="cursor: pointer">
-          <el-link type="primary" :underline="false" style="margin-left: 5px; color: #10429a">下载</el-link>
+        <template slot-scope="scope">
+          <div class="operate-container" @click="handleDownload(scope.row)">
+            <img src="../../assets/xiazai.png" height="14" alt="download" style="cursor: pointer">
+            <el-link type="primary" :underline="false" style="margin-left: 5px; color: #10429a">下载</el-link>
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -22,20 +24,31 @@
 </template>
 
 <script>
+import { getTort } from '@/api/tort'
+import { download } from '@/utils'
+
 export default {
   name: 'List',
   data() {
     return {
-      evidenceList: [{
-        addr: '1234',
-        timestamp: 1610092098666,
-        comment: 'abc'
-      }]
+      evidenceList: []
     }
   },
+  created() {
+    getTort().then(res => {
+      res.data.forEach(v => {
+        this.evidenceList.push({
+          addr: v.url,
+          timestamp: new Date(v.time),
+          comment: v.description,
+          content: v.content
+        })
+      })
+    })
+  },
   methods: {
-    download() {
-
+    handleDownload(row) {
+      download(row.content, row.comment + '.png' || 'img.png')
     }
   }
 }

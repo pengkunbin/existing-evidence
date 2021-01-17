@@ -16,6 +16,8 @@
 
 <script>
 
+import { saveTort } from '@/api/tort'
+
 export default {
   name: 'Apply',
   data() {
@@ -34,7 +36,20 @@ export default {
   },
   methods: {
     submit() {
-      console.log(this.form)
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          const body = {}
+          body.url = this.form.url
+          body.description = this.form.comment
+          body.author = this.$store.getters.username
+          saveTort(body).then(res => {
+            this.$message.success('申请成功')
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     }
   }
 
